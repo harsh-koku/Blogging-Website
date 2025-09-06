@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create New Post</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        body {
+          margin: 0;
+          font-family: 'Inter', sans-serif;
+          background: linear-gradient(rgba(18, 18, 18, 0.75), rgba(18, 18, 18, 0.75)),
+                      url('https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+          background-size: cover;
+          color: white;
+        }
+
+        .glass-card {
+          background: rgba(255, 255, 255, 0.07);
+          backdrop-filter: blur(14px);
+          border-radius: 20px;
+          padding: 2rem;
+          box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          color: white;
+          opacity: 0;
+          transform: scale(0.95);
+          animation: zoomIn 0.8s ease-out forwards;
+        }
+
+        @keyframes zoomIn {
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        h2 {
+          font-family: 'Playfair Display', serif;
+        }
+
+        label {
+          font-weight: 600;
+        }
+
+        a.btn, button.btn {
+          transition: all 0.3s ease-in-out;
+        }
+
+        a.btn:hover, button.btn:hover {
+          transform: scale(1.03);
+          box-shadow: 0 8px 20px rgba(255, 193, 7, 0.4);
+        }
+
+        input.form-control, textarea.form-control {
+          background-color: rgba(255, 255, 255, 0.1);
+          color: white;
+          border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        input.form-control::placeholder,
+        textarea.form-control::placeholder {
+          color: #ccc;
+        }
+
+        input.form-control:focus, textarea.form-control:focus {
+          background-color: rgba(255, 255, 255, 0.15);
+          color: white;
+          border-color: #ffc107;
+          box-shadow: 0 0 12px rgba(255, 193, 7, 0.5);
+        }
+
+        #loader {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: #000;
+          z-index: 9999;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .spinner-border {
+          width: 3rem;
+          height: 3rem;
+        }
+
+        nav {
+          background: rgba(0, 0, 0, 0.4);
+          backdrop-filter: blur(6px);
+          padding: 1rem 2rem;
+        }
+
+        nav a {
+          color: white;
+          text-decoration: none;
+          margin: 0 1rem;
+          font-weight: 600;
+        }
+
+        nav a:hover {
+          color: #ffc107;
+        }
+
+        @media (max-width: 768px) {
+          .glass-card {
+            padding: 1rem;
+          }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Loader -->
+<div id="loader">
+    <div class="spinner-border text-light" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<!-- Navbar -->
+<nav class="d-flex justify-content-between align-items-center">
+    <div class="fs-4">📝 Eysis Blog</div>
+    <div>
+        <a href="/">Home</a>
+        <a href="#form">New Post</a>
+    </div>
+</nav>
+
+<!-- Form Card -->
+<div class="container my-5" id="form">
+    <div class="glass-card">
+        <h2 class="text-center mb-4">Create New Blog Post</h2>
+
+        <form th:action="@{/save}" th:object="${post}" method="post">
+            <div class="mb-3">
+                <label class="form-label">Title</label>
+                <input type="text" th:field="*{title}" class="form-control" placeholder="Enter post title" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Author</label>
+                <input type="text" th:field="*{author}" class="form-control" placeholder="Enter author name" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Content</label>
+                <textarea th:field="*{content}" class="form-control" rows="6" placeholder="Write your post content here..." required></textarea>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a href="/" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Cancel</a>
+                <button type="submit" class="btn btn-success"><i class="fas fa-upload"></i> Publish Post</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    // Hide loader after page load
+    window.addEventListener("load", () => {
+      document.getElementById("loader").style.display = "none";
+    });
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute("href"))
+          .scrollIntoView({ behavior: "smooth" });
+      });
+    });
+</script>
+
+</body>
+</html>
